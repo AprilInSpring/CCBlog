@@ -4,7 +4,6 @@ import com.zxnk.entity.LinkVo;
 import com.zxnk.service.LinkService;
 import com.zxnk.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

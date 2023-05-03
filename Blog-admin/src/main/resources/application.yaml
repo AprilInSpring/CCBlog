@@ -10,6 +10,18 @@ spring:
     multipart:
       max-file-size: 2MB
       max-request-size: 5MB
+  #配置redis的链接
+  redis:
+    host: 192.168.66.100
+    port: 6379
+    timeout: 30000
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 8
+
 mybatis-plus:
   configuration:
     # 日志
