@@ -60,6 +60,4 @@ public class CategoryServiceImpl implements CategoryService {
     public Category getCategoryById(Long id) {
         return categoryMapper.selectById(id);
     }
-
-
 }

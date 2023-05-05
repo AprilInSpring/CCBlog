@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * @Version 1.0
  */
 @Configuration
-public class MyBatisPlusInterceptor {
+public class MyBatisPlusInterceptorConfig{
 
     @Bean
     public MybatisPlusInterceptor myBatisPlusInterceptor(){

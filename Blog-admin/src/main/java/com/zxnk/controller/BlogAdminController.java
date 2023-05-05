@@ -4,6 +4,7 @@ import com.zxnk.entity.BlogUserLoginVo;
 import com.zxnk.dao.User;
 import com.zxnk.exception.SystemException;
 import com.zxnk.service.BlogLoginService;
+import com.zxnk.service.LogoutService;
 import com.zxnk.util.AppHttpCodeEnum;
 import com.zxnk.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version 1.0
  */
 @RestController
-public class BlogLoginController {
+public class BlogAdminController {
 
     @Autowired
     private BlogLoginService blogLoginService;
+
+    @Autowired
+    private LogoutService logoutService;
 
     /**
      * @param user 用户对象
@@ -49,7 +53,18 @@ public class BlogLoginController {
     public String test(){
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return userDetails.getUsername();
+        Object principal = authentication.getPrincipal();
+        System.out.println(principal);
+        return null;
+    }
+
+    /**
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 实现用户的退出登录功能，并删除redis缓存和清除认证状态
+     * @date 2023/5/4 19:04
+    */
+    @PostMapping("/logout")
+    public ResponseResult logout(){
+        return logoutService.logout();
     }
 }

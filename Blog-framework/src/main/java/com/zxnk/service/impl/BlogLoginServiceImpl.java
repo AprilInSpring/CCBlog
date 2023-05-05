@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
@@ -37,7 +38,8 @@ public class BlogLoginServiceImpl implements BlogLoginService {
     @Override
     public ResponseResult<BlogUserLoginVo> login(User user) {
         //登录权证
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword());
         //认证信息，该方法会调用userDetailService的认证逻辑，进行判断，此方法会使用UserDetailService进行逻辑判断
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         //获取认证用户信息
@@ -47,7 +49,9 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         String token = JwtUtil.createJWT(userId);
         //把用户id和用户信息存入redis，过期时间为10分钟
         redisTemplate.opsForValue().set("loginUser:"+userId,loginUser,10, TimeUnit.MINUTES);
-
+        //将身份信息存入securityContext
+        UsernamePasswordAuthenticationToken securityToken = new UsernamePasswordAuthenticationToken(loginUser, null, null);
+        SecurityContextHolder.getContext().setAuthentication(securityToken);
         //把token和userInfo封装并返回
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
         BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(token, userInfoVo);

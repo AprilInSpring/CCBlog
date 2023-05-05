@@ -54,11 +54,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         //配置权限
         http.authorizeRequests().antMatchers("/login").permitAll()
-                .antMatchers("/link/getAllLink").authenticated()
+                .antMatchers("/link/getAllLink").authenticated()    //此路径的请求需要进行登录
+                .antMatchers("/logout").authenticated()             //此路径的请求需要进行登录
                 //前台不需要仅限权限管理，不需要登录也可以进行全部操作
                 .anyRequest().permitAll();
         //配置登录检验过滤器
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        //禁止security自带的推出登录
+        http.logout().disable();
 
         //配置异常处理器
         http.exceptionHandling()
