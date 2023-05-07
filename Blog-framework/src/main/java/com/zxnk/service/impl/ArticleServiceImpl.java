@@ -12,10 +12,13 @@ import com.zxnk.util.BeanCopyUtils;
 import com.zxnk.util.ResponseResult;
 import com.zxnk.util.SystemConstant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * @ClassName ArticleServiceImpl
@@ -31,6 +34,8 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleMapper articleMapper;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * @return: java.util.List<com.zxnk.dao.Article>
@@ -105,9 +110,46 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleDetailVo findById(Long id) {
         //查询相应的文章对象
         Article article = articleMapper.selectById(id);
+        //完成浏览量的即时更新
+        Integer viewCount = (Integer) redisTemplate.opsForHash().get("viewCount", id.toString());
+        article.setViewCount(viewCount.longValue());
         //完成数据的封装
         ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
         articleDetailVo.setCategoryName(categoryService.getCategoryById(articleDetailVo.getCategoryId()).getName());
         return articleDetailVo;
+    }
+
+    /**
+     * @param id 博文id
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 根据id实现博文浏览量的自增
+     * @date 2023/5/7 17:11
+    */
+    @Override
+    public ResponseResult updateViewCountById(Long id) {
+        //完成redis中hashValue值的自增1，第一个参数为缓存的键，第二个为hash键，第三个为自增的幅度
+        redisTemplate.opsForHash().increment("viewCount",id.toString(),1l);
+        return ResponseResult.okResult();
+    }
+
+    /**
+     * @param viewCount 博文浏览量集合
+     * @return: void
+     * @decription 根据博文id，批量更新博文浏览量
+     * @date 2023/5/7 17:22
+    */
+    @Override
+    public void updateArticles(Map<String, Integer> viewCount) {
+        viewCount.entrySet().forEach(new Consumer<Map.Entry<String, Integer>>() {
+            @Override
+            public void accept(Map.Entry<String, Integer> stringIntegerEntry) {
+                //获取id
+                Long id = Long.valueOf(stringIntegerEntry.getKey());
+                //获取viewCount
+                Long viewCount = Long.valueOf(stringIntegerEntry.getValue());
+                //进行更新
+                articleMapper.updateById(Article.builder().id(id).viewCount(viewCount).build());
+            }
+        });
     }
 }

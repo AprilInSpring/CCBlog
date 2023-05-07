@@ -48,5 +48,21 @@ redis数据库出现问题，使用命令或者可视化工具无法获取键的
 
 问题解决
 
-重写redis的序列化方法，改成redis自带的GenericJackson2JsonRedisSerializer()序列化，问题解决
+重写redis的序列化方法，改成redis自带的GenericJackson2JsonRed，isSerializer()序列化，问题解决
+
+## 2023/5/6 21:30
+
+使用@ConfigurationProperties注解无法完成配置文件的属性注入，尚未解决
+
+问题解决
+
+使用@Value(${xxx})代替上述注解完成配置文件的属性注入
+
+## 2023/5/7 20:47
+
+swagger2的api接口文档乱码，尚未解决
+
+问题标记
+
+需要加深swagger2的功能学习，方便工作写接口测试文档
 

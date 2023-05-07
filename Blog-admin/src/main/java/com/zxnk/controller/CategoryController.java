@@ -5,6 +5,8 @@ import com.zxnk.entity.CategoryVo;
 import com.zxnk.service.CategoryService;
 import com.zxnk.util.BeanCopyUtils;
 import com.zxnk.util.ResponseResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/category")
+@Api(tags = "博客类别控制类",description = "博客类别相应接口")
 public class CategoryController {
 
     @Autowired
@@ -32,6 +35,7 @@ public class CategoryController {
      * @date 2023/4/26 9:27
     */
     @GetMapping("/getCategoryList")
+    @ApiOperation("返回状态正常的博文分类列表")
     public ResponseResult<List<CategoryVo>> getCategoryList(){
         List<Category> categoryList = categoryService.getCategoryList();
         List<CategoryVo> categoryVoList = BeanCopyUtils.copyBeans(categoryList, CategoryVo.class);

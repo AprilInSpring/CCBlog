@@ -33,7 +33,6 @@ public class ArticleVo {
     //访问量
     private Long viewCount;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
     private Date createTime;
 
 

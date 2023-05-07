@@ -49,9 +49,6 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         String token = JwtUtil.createJWT(userId);
         //把用户id和用户信息存入redis，过期时间为10分钟
         redisTemplate.opsForValue().set("loginUser:"+userId,loginUser,10, TimeUnit.MINUTES);
-        //将身份信息存入securityContext
-        UsernamePasswordAuthenticationToken securityToken = new UsernamePasswordAuthenticationToken(loginUser, null, null);
-        SecurityContextHolder.getContext().setAuthentication(securityToken);
         //把token和userInfo封装并返回
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
         BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(token, userInfoVo);

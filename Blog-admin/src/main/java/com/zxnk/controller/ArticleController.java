@@ -10,6 +10,10 @@ import com.zxnk.service.ArticleService;
 import com.zxnk.service.CategoryService;
 import com.zxnk.util.BeanCopyUtils;
 import com.zxnk.util.ResponseResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/article")
+@Api(tags = "博客文章控制类",description = "博客文章相应接口")
 public class ArticleController {
 
     @Autowired
@@ -32,6 +37,7 @@ public class ArticleController {
     private CategoryService categoryService;
 
     @GetMapping("/list")
+    @ApiOperation(value = "获取全部文章")
     public List<Article> findAll(){
         return articleService.findAll();
     }
@@ -42,6 +48,7 @@ public class ArticleController {
      * @date 2023/4/25 13:30
     */
     @GetMapping("/hotArticleList")
+    @ApiOperation("返回最做多点击的10条博文，排除草稿")
     public ResponseResult<List<HotArticleVo>> hotArticleList(){
         List<Article> result = articleService.hotArticleList();
         List<HotArticleVo> hotArticleVos = BeanCopyUtils.copyBeans(result, HotArticleVo.class);
@@ -57,6 +64,12 @@ public class ArticleController {
      * @date 2023/4/26 10:39
     */
     @GetMapping("/articleList")
+    @ApiOperation("根据分页条件，对博文进行分页查询，并判断是否选择同一类别下的博文，并且博文的状态必须是正常的，而且对数据采用置顶的排序")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum",value = "分页页号"),
+            @ApiImplicitParam(name = "pageSize",value = "分页大小"),
+            @ApiImplicitParam(name = "categoryId",value = "文章类别id")
+    })
     public ResponseResult<PageVo> articleList(@RequestParam(defaultValue = "0")Integer pageNum,
                                               @RequestParam(defaultValue = "10") Integer pageSize,
                                               Long categoryId){
@@ -70,8 +83,17 @@ public class ArticleController {
         return ResponseResult.okResult(pageVo);
     }
 
+    @ApiOperation("根据id查询相应的文章详情")
     @GetMapping("/{id}")
+    @ApiImplicitParam(name = "id",value = "文章id")
     public ResponseResult<ArticleDetailVo> getArticleDetailById(@PathVariable Long id){
         return ResponseResult.okResult(articleService.findById(id));
+    }
+
+    @ApiOperation("根据id更新文章的浏览量")
+    @PutMapping("/updateViewCount/{id}")
+    @ApiImplicitParam(name = "id",value = "文章id")
+    public ResponseResult updateViewCount(@PathVariable Long id){
+        return articleService.updateViewCountById(id);
     }
 }

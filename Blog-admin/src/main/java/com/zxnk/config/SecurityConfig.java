@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -42,8 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //登录认证器，使用这个类可以管理登录信息，并进行相应处理
     @Bean
     @Override
-    protected AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Override
@@ -53,9 +54,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //关闭csrf
         http.csrf().disable();
         //配置权限
-        http.authorizeRequests().antMatchers("/login").permitAll()
-                .antMatchers("/link/getAllLink").authenticated()    //此路径的请求需要进行登录
+        http
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests().antMatchers("/login").anonymous()
                 .antMatchers("/logout").authenticated()             //此路径的请求需要进行登录
+                .antMatchers("/comment").authenticated()
                 //前台不需要仅限权限管理，不需要登录也可以进行全部操作
                 .anyRequest().permitAll();
         //配置登录检验过滤器

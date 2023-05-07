@@ -1,5 +1,6 @@
 package com.zxnk.controller;
 
+import com.zxnk.annotation.SystemLog;
 import com.zxnk.entity.BlogUserLoginVo;
 import com.zxnk.dao.User;
 import com.zxnk.exception.SystemException;
@@ -7,6 +8,9 @@ import com.zxnk.service.BlogLoginService;
 import com.zxnk.service.LogoutService;
 import com.zxnk.util.AppHttpCodeEnum;
 import com.zxnk.util.ResponseResult;
+import com.zxnk.util.SecurityUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -26,7 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version 1.0
  */
 @RestController
-public class BlogAdminController {
+@Api(tags = "登录控制类",description = "登录相应接口")
+public class LogController {
 
     @Autowired
     private BlogLoginService blogLoginService;
@@ -41,6 +46,8 @@ public class BlogAdminController {
      * @date 2023/5/3 11:56
     */
     @PostMapping("/login")
+    @SystemLog(Description = "用户登录")
+    @ApiOperation("根据前端传入的登录用户信息，完成user对象的封装，并进行相应的逻辑处理，完成登录认证")
     public ResponseResult<BlogUserLoginVo> login(@RequestBody User user){
         //进行参数校验
         if(!StringUtils.hasText(user.getUserName())){
@@ -49,21 +56,13 @@ public class BlogAdminController {
         return blogLoginService.login(user);
     }
 
-    @GetMapping("/user")
-    public String test(){
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        Object principal = authentication.getPrincipal();
-        System.out.println(principal);
-        return null;
-    }
-
     /**
      * @return: com.zxnk.util.ResponseResult
      * @decription 实现用户的退出登录功能，并删除redis缓存和清除认证状态
      * @date 2023/5/4 19:04
     */
     @PostMapping("/logout")
+    @ApiOperation("实现用户的退出登录功能，并删除redis缓存和清除认证状态")
     public ResponseResult logout(){
         return logoutService.logout();
     }

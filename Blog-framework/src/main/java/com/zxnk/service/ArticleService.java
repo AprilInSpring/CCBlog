@@ -3,8 +3,10 @@ package com.zxnk.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zxnk.dao.Article;
 import com.zxnk.entity.ArticleDetailVo;
+import com.zxnk.util.ResponseResult;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ArticleService{
     List<Article> findAll();
@@ -14,4 +16,8 @@ public interface ArticleService{
     Page<Article> articleList(Integer pageNum, Integer pageSize, Long categoryId);
 
     ArticleDetailVo findById(Long id);
+
+    ResponseResult updateViewCountById(Long id);
+
+    void updateArticles(Map<String, Integer> viewCount);
 }

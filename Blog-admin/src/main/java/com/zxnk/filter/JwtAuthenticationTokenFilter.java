@@ -61,14 +61,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
         //获取userId
         String userId = claims.getSubject();
-        //若当前用户已经是登录状态，则
-        //从redis中获取用户信息不需要再进行其他判定（通过securityContextHolder进行验证）
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //当前用户没登录
-        if(!Objects.isNull(authentication)){
-            filterChain.doFilter(httpServletRequest,httpServletResponse);
-            return;
-        }
+        //获取登录用户
         LoginUser loginUser = (LoginUser) redisTemplate.opsForValue().get("loginUser:" + userId);
         if(Objects.isNull(loginUser)){
             System.out.println("redis身份信息过期，重新登录");
@@ -76,6 +69,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             WebUtils.renderString(httpServletResponse, JSON.toJSONString(errorResult));
             return;
         }
+        //存入SecurityContextHolder
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser,null,null);
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        System.out.println("完成用户数据注入到上下文环境");
         //请求跳转
         filterChain.doFilter(httpServletRequest,httpServletResponse);
     }

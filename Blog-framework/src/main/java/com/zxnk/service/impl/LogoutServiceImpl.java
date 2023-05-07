@@ -28,7 +28,7 @@ public class LogoutServiceImpl implements LogoutService {
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = loginUser.getUser().getId();
         redisTemplate.delete("loginUser:"+userId.toString());
-        //2.清除SecurityContext中的凭证信息
+        //清除认证状态
         SecurityContextHolder.clearContext();
         return ResponseResult.okResult();
     }
