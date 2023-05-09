@@ -1,8 +1,8 @@
 package com.zxnk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.zxnk.dao.Link;
-import com.zxnk.entity.LinkVo;
+import com.zxnk.entity.Link;
+import com.zxnk.dto.LinkVo;
 import com.zxnk.mapper.LinkMapper;
 import com.zxnk.service.LinkService;
 import com.zxnk.util.BeanCopyUtils;

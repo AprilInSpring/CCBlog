@@ -1,8 +1,8 @@
 package com.zxnk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.zxnk.dao.LoginUser;
-import com.zxnk.dao.User;
+import com.zxnk.entity.LoginUser;
+import com.zxnk.entity.User;
 import com.zxnk.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,8 +1,8 @@
 package com.zxnk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.zxnk.dao.User;
-import com.zxnk.entity.UserInfoVo;
+import com.zxnk.entity.User;
+import com.zxnk.dto.UserInfoVo;
 import com.zxnk.exception.SystemException;
 import com.zxnk.mapper.UserMapper;
 import com.zxnk.service.UserService;

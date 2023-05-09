@@ -1,6 +1,6 @@
 package com.zxnk.service;
 
-import com.zxnk.dao.Category;
+import com.zxnk.entity.Category;
 
 import java.util.List;
 

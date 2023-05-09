@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 /**
  * @ClassName SecurityConfig
- * @Description TODO
+ * @Description 安全框架配置文件
  * @Author cc
  * @Date 2023/5/3 10:49
  * @Version 1.0
@@ -57,11 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().antMatchers("/login").anonymous()
-                .antMatchers("/logout").authenticated()             //此路径的请求需要进行登录
-                .antMatchers("/comment").authenticated()
-                //前台不需要仅限权限管理，不需要登录也可以进行全部操作
-                .anyRequest().permitAll();
+                .authorizeRequests().antMatchers("/user/login").anonymous()
+                //后台需要权限管理，需要登录才可以进行全部操作
+                .anyRequest().authenticated();
         //配置登录检验过滤器
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
         //禁止security自带的推出登录

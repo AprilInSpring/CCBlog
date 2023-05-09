@@ -2,9 +2,9 @@ package com.zxnk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zxnk.dao.Article;
-import com.zxnk.dao.Category;
-import com.zxnk.entity.ArticleDetailVo;
+import com.zxnk.entity.Article;
+import com.zxnk.entity.Category;
+import com.zxnk.dto.ArticleDetailVo;
 import com.zxnk.mapper.ArticleMapper;
 import com.zxnk.service.ArticleService;
 import com.zxnk.service.CategoryService;
@@ -38,7 +38,7 @@ public class ArticleServiceImpl implements ArticleService {
     private RedisTemplate redisTemplate;
 
     /**
-     * @return: java.util.List<com.zxnk.dao.Article>
+     * @return: java.util.List<com.zxnk.entity.Article>
      * @decription 查询所有可状态正常的博文
      * @date 2023/4/26 9:05
     */
@@ -76,7 +76,7 @@ public class ArticleServiceImpl implements ArticleService {
      * @param pageNum 初始页
      * @param pageSize 每页大小
      * @param categoryId 博客分类id
-     * @return: java.util.List<com.zxnk.dao.Article>
+     * @return: java.util.List<com.zxnk.entity.Article>
      * @decription 根据参数完成博客文章的分类查询，当存在博客类别id的时候，根据博文分类id进行分页，否则进行全分页
      * @date 2023/4/26 10:13
     */

@@ -1,7 +1,7 @@
 package com.zxnk.service;
 
-import com.zxnk.dao.Comment;
-import com.zxnk.entity.CommentVo;
+import com.zxnk.entity.Comment;
+import com.zxnk.dto.CommentVo;
 import com.zxnk.util.ResponseResult;
 
 import java.util.List;

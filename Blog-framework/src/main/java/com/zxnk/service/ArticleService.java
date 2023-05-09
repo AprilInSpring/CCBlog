@@ -1,8 +1,8 @@
 package com.zxnk.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zxnk.dao.Article;
-import com.zxnk.entity.ArticleDetailVo;
+import com.zxnk.entity.Article;
+import com.zxnk.dto.ArticleDetailVo;
 import com.zxnk.util.ResponseResult;
 
 import java.util.List;

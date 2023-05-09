@@ -1,6 +1,6 @@
 package com.zxnk.service.impl;
 
-import com.zxnk.dao.LoginUser;
+import com.zxnk.entity.LoginUser;
 import com.zxnk.service.LogoutService;
 import com.zxnk.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;

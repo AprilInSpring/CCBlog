@@ -1,7 +1,7 @@
 package com.zxnk.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zxnk.dao.Article;
+import com.zxnk.entity.Article;
 import org.springframework.stereotype.Repository;
 
 @Repository

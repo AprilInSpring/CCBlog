@@ -1,6 +1,6 @@
 package com.zxnk.starter;
 
-import com.zxnk.dao.Article;
+import com.zxnk.entity.Article;
 import com.zxnk.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

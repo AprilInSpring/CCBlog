@@ -1,7 +1,6 @@
 package com.zxnk.service;
 
-import com.zxnk.dao.Link;
-import com.zxnk.entity.LinkVo;
+import com.zxnk.dto.LinkVo;
 
 import java.util.List;
 

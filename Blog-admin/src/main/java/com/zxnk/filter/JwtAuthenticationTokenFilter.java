@@ -1,7 +1,7 @@
 package com.zxnk.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.zxnk.dao.LoginUser;
+import com.zxnk.entity.LoginUser;
 import com.zxnk.util.AppHttpCodeEnum;
 import com.zxnk.util.JwtUtil;
 import com.zxnk.util.ResponseResult;
@@ -10,7 +10,6 @@ import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -62,7 +61,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         //获取userId
         String userId = claims.getSubject();
         //获取登录用户
-        LoginUser loginUser = (LoginUser) redisTemplate.opsForValue().get("loginUser:" + userId);
+        LoginUser loginUser = (LoginUser) redisTemplate.opsForValue().get("loginAdmin:" + userId);
         if(Objects.isNull(loginUser)){
             System.out.println("redis身份信息过期，重新登录");
             ResponseResult errorResult = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);

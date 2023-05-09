@@ -2,10 +2,10 @@ package com.zxnk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zxnk.dao.Comment;
-import com.zxnk.dao.User;
-import com.zxnk.entity.CommentVo;
-import com.zxnk.entity.PageVo;
+import com.zxnk.entity.Comment;
+import com.zxnk.entity.User;
+import com.zxnk.dto.CommentVo;
+import com.zxnk.dto.PageVo;
 import com.zxnk.exception.SystemException;
 import com.zxnk.mapper.CommentMapper;
 import com.zxnk.mapper.UserMapper;

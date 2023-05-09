@@ -1,13 +1,10 @@
 package com.zxnk.service.impl;
 
-import com.zxnk.dao.Article;
-import com.zxnk.dao.Category;
-import com.zxnk.entity.CategoryVo;
-import com.zxnk.mapper.ArticleMapper;
+import com.zxnk.entity.Article;
+import com.zxnk.entity.Category;
 import com.zxnk.mapper.CategoryMapper;
 import com.zxnk.service.ArticleService;
 import com.zxnk.service.CategoryService;
-import com.zxnk.util.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
     private ArticleService articleService; ;
 
     /**
-     * @return: java.util.List<com.zxnk.dao.Category>
+     * @return: java.util.List<com.zxnk.entity.Category>
      * @decription 查询可用的博文分类列表，并且该分类下必须有博文
      * @date 2023/4/26 9:01
     */
@@ -52,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * @param id 博文分类id
-     * @return: com.zxnk.dao.Category
+     * @return: com.zxnk.entity.Category
      * @decription 根据博文id获取博文对象
      * @date 2023/4/26 9:15
     */
