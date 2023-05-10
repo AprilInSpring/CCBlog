@@ -8,8 +8,11 @@ import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
+import com.zxnk.entity.ArticleTag;
+import com.zxnk.mapper.ArticleTagMapper;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -20,6 +23,9 @@ import java.io.InputStream;
 @ConfigurationProperties(prefix = "oss")
 @MapperScan("com.zxnk.mapper")
 public class OSSTest {
+
+    @Autowired
+    private ArticleTagMapper articleTagMapper;
 
     private String accessKey;
     private String secretKey;
@@ -80,5 +86,10 @@ public class OSSTest {
             //ignore
         }
 
+    }
+
+    @Test
+    public void testInsert(){
+        articleTagMapper.insert(new ArticleTag(12L,12L));
     }
 }

@@ -1,12 +1,17 @@
 package com.zxnk.controller;
 
+import com.zxnk.dto.RoutersVo;
 import com.zxnk.entity.LoginUser;
+import com.zxnk.entity.Menu;
 import com.zxnk.entity.User;
 import com.zxnk.service.AdminLoginService;
+import com.zxnk.service.MenuService;
 import com.zxnk.util.ResponseResult;
 import com.zxnk.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @ClassName AdminLogController
@@ -37,6 +42,11 @@ public class AdminLogController {
         return cc;
     }
 
+    /**
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 获取登录用户的身份信息，包括权限、角色
+     * @date 2023/5/9 10:48
+    */
     @GetMapping("/getInfo")
     public ResponseResult getInfo(){
         //获取当前用户
@@ -44,4 +54,27 @@ public class AdminLogController {
         return adminLoginService.getUserInfo(loginUser.getUser());
     }
 
+    /**
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 获取路由信息
+     * @date 2023/5/9 10:49
+    */
+    @GetMapping("/getRouters")
+    public ResponseResult getRouters(){
+        Long userId = SecurityUtils.getUserId();
+        //获取当前用户可用的路由树
+        List<Menu> routerMenuTree = adminLoginService.getRouterMenuTreeByUserId(userId);
+        //封装数据并返回
+        return ResponseResult.okResult(new RoutersVo(routerMenuTree));
+    }
+
+    /**
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 退出登录，并清除redis和SecurityContext中的身份信息
+     * @date 2023/5/9 10:54
+    */
+    @PostMapping("/user/logout")
+    public ResponseResult logout(){
+        return adminLoginService.logout();
+    }
 }

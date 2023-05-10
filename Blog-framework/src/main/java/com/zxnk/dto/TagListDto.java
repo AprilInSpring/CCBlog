@@ -6,21 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @ClassName CategoryVo
- * @Description 表单博文分类数据
+ * @ClassName TagListDto
+ * @Description 前端搜索参数封装类
  * @Author cc
- * @Date 2023/4/26 9:19
+ * @Date 2023/5/9 13:36
  * @Version 1.0
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CategoryVo {
-    //id
-    private Long id;
-    //name
+public class TagListDto {
+
+    //标签名
     private String name;
-    //description
-    private String description;
+    //标记
+    private String remark;
 }

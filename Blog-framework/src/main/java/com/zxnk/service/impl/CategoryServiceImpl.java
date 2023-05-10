@@ -1,10 +1,14 @@
 package com.zxnk.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.zxnk.dto.CategoryVo;
 import com.zxnk.entity.Article;
 import com.zxnk.entity.Category;
 import com.zxnk.mapper.CategoryMapper;
 import com.zxnk.service.ArticleService;
 import com.zxnk.service.CategoryService;
+import com.zxnk.util.BeanCopyUtils;
+import com.zxnk.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,5 +60,26 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category getCategoryById(Long id) {
         return categoryMapper.selectById(id);
+    }
+
+    /**
+     * @return: java.util.List<com.zxnk.entity.Category>
+     * @decription 查询所有可用的博文分类
+     * @date 2023/5/9 16:48
+     */
+    @Override
+    public ResponseResult getAll() {
+        LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Category::getStatus,"0");
+        List<Category> categories = categoryMapper.selectList(wrapper);
+        List<CategoryVo> categoryVos = BeanCopyUtils.copyBeans(categories, CategoryVo.class);
+        return ResponseResult.okResult(categoryVos);
+    }
+
+    public List<Category> getAllCategories() {
+        LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Category::getStatus,"0");
+        List<Category> categories = categoryMapper.selectList(wrapper);
+        return categories;
     }
 }

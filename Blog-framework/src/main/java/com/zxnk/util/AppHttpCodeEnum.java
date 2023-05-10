@@ -15,7 +15,8 @@ public enum AppHttpCodeEnum {
     LOGIN_ERROR(505,"用户名或密码错误"),
     REQUIRE_CONTENT(506,"评论内容不能为空"),
     IMG_TYPE_ERROR(507,"仅支持jpg和png格式"),
-    NICKNAME_EXISTED(508,"昵称已经存在");
+    NICKNAME_EXISTED(508,"昵称已经存在"),
+    UPLOAD_ERROR(509,"图片上传失败");
     int code;
     String msg;
 

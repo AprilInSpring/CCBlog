@@ -3,14 +3,17 @@ package com.zxnk.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zxnk.entity.LoginUser;
 import com.zxnk.entity.User;
+import com.zxnk.mapper.MenuMapper;
 import com.zxnk.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Id;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,6 +28,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private MenuMapper menuMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -40,6 +45,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(Objects.isNull(user)){
             throw new RuntimeException("用户名或密码错误");
         }
-        return new LoginUser(user);
+        //返回用户信息，只有管理员才有资格进行excel下载
+        if(user.getType().equals(1)){   //管理员
+            //查询相关权限，并进行数据封装
+            List<String> perms = menuMapper.getPermsByUserId(user.getId());
+            return new LoginUser(user,perms);
+        }
+
+        return new LoginUser(user,null);
     }
 }

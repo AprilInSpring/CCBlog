@@ -3,6 +3,7 @@ package com.zxnk.service.impl;
 import com.zxnk.dto.AdminUserInfoVo;
 import com.zxnk.dto.UserInfoVo;
 import com.zxnk.entity.LoginUser;
+import com.zxnk.entity.Menu;
 import com.zxnk.entity.User;
 import com.zxnk.service.AdminLoginService;
 import com.zxnk.service.MenuService;
@@ -16,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -80,5 +82,33 @@ public class AdminLoginServiceImpl implements AdminLoginService {
                 AdminUserInfoVo.builder()
                         .permissions(perms).roles(roleKeys).user(userInfoVo)
                         .build());
+    }
+
+
+    /**
+     * @param userId 用户id
+     * @return: java.util.List<com.zxnk.entity.Menu>
+     * @decription 根据用户id获取当前用户可用的菜单树
+     * @date 2023/5/9 10:52
+    */
+    @Override
+    public List<Menu> getRouterMenuTreeByUserId(Long userId) {
+        return menuService.getRouterMenuTreeByUserId(userId);
+    }
+
+    /**
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 退出登录，并清除redis和SecurityContext中的身份信息
+     * @date 2023/5/9 10:56
+    */
+    @Override
+    public ResponseResult logout() {
+        //获取用户id
+        Long userId = SecurityUtils.getUserId();
+        //清除redis中的用户信息
+        redisTemplate.delete("loginAdmin:"+userId);
+        //清除上下文的用户信息
+        SecurityContextHolder.clearContext();
+        return ResponseResult.okResult();
     }
 }

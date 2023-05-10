@@ -2,10 +2,13 @@ package com.zxnk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zxnk.dto.AddArticleDto;
 import com.zxnk.entity.Article;
+import com.zxnk.entity.ArticleTag;
 import com.zxnk.entity.Category;
 import com.zxnk.dto.ArticleDetailVo;
 import com.zxnk.mapper.ArticleMapper;
+import com.zxnk.mapper.ArticleTagMapper;
 import com.zxnk.service.ArticleService;
 import com.zxnk.service.CategoryService;
 import com.zxnk.util.BeanCopyUtils;
@@ -14,11 +17,13 @@ import com.zxnk.util.SystemConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName ArticleServiceImpl
@@ -36,6 +41,8 @@ public class ArticleServiceImpl implements ArticleService {
     private CategoryService categoryService;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private ArticleTagMapper articleTagMapper;
 
     /**
      * @return: java.util.List<com.zxnk.entity.Article>
@@ -151,5 +158,30 @@ public class ArticleServiceImpl implements ArticleService {
                 articleMapper.updateById(Article.builder().id(id).viewCount(viewCount).build());
             }
         });
+    }
+
+    /**
+     * @param articleDto 博文数据类
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 添加博文数据对象，并维护博文标签表
+     * @date 2023/5/9 17:18
+    */
+    @Override
+    @Transactional
+    public ResponseResult addArticle(AddArticleDto articleDto) {
+        //转换成article对象
+        Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
+        articleMapper.insert(article);
+
+        //维护博文标签表
+        List<Long> tags = articleDto.getTags();
+        //获取文章id
+        Long articleId = article.getId();
+        tags.stream()
+                //转成博客标签对象
+                .map(tag -> new ArticleTag(articleId, tag))
+                //完成博文标签表的新增
+                .forEach(articleTag -> articleTagMapper.insert(articleTag));
+        return ResponseResult.okResult();
     }
 }

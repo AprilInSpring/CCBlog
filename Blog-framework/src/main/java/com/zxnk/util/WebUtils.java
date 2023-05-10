@@ -31,11 +31,21 @@ public class WebUtils
         }
     }
 
-
-    public static void setDownLoadHeader(String filename, ServletContext context, HttpServletResponse response) throws UnsupportedEncodingException {
-        String mimeType = context.getMimeType(filename);//获取文件的mime类型
-        response.setHeader("content-type",mimeType);
-        String fname= URLEncoder.encode(filename,"UTF-8");
+    /**
+     * @param filename 下载的文件名
+     * @param response 响应对象
+     * @return: void
+     * @decription 创建exel表下载请求
+     * @date 2023/5/9 20:56
+    */
+    public static void setDownLoadHeader(String filename, HttpServletResponse response) throws UnsupportedEncodingException {
+        //设置下载的响应类型
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        //设置编码
+        response.setCharacterEncoding("utf-8");
+        //设置文件名，防止乱码
+        String fname= URLEncoder.encode(filename,"UTF-8").replaceAll("\\+", "%20");
+        //设置下载的响应头
         response.setHeader("Content-disposition","attachment; filename="+fname);
     }
 }

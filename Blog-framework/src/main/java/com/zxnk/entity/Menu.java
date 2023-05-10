@@ -1,12 +1,15 @@
 package com.zxnk.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 菜单权限表(CcMenu)表实体类
@@ -19,6 +22,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+//改变set方法的返回值
+@Accessors(chain = true)
 public class Menu{
     //菜单ID
     private Long id;
@@ -56,6 +61,9 @@ public class Menu{
     private String remark;
     
     private String delFlag;
+
+    @TableField(exist = false)
+    private List<Menu> children;
 
 }
 

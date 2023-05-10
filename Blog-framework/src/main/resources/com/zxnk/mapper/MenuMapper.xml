@@ -18,7 +18,40 @@
     </select>
     <select id="getAllPermissions" resultType="java.lang.String">
         SELECT
-            DISTINCT cc_menu.perms
-        FROM cc_menu;
+            DISTINCT IFNULL(m.perms,'')
+        FROM
+            cc_menu m
+        WHERE
+            m.menu_type IN ('F','C') AND
+            m.`status` = 0 AND
+            m.del_flag = 0;
+    </select>
+    <select id="getAllRouterMenu" resultType="com.zxnk.entity.Menu">
+        SELECT
+            DISTINCT m.id, m.parent_id, m.menu_name, m.path, m.component, m.visible, m.status, IFNULL(m.perms,'') AS perms, m.is_frame,  m.menu_type, m.icon, m.order_num, 						m.create_time
+        FROM
+            cc_menu m
+        WHERE
+            m.menu_type IN ('C','M') AND
+            m.`status` = 0 AND
+            m.del_flag = 0
+        ORDER BY
+            m.parent_id,m.order_num;
+    </select>
+    <select id="getRouterMenuTreeByUserId" resultType="com.zxnk.entity.Menu">
+        SELECT
+            DISTINCT m.id, m.parent_id, m.menu_name, m.path, m.component, m.visible, m.status, IFNULL(m.perms,'') AS perms, m.is_frame,  m.menu_type, m.icon,
+                     m.order_num, m.create_time
+        FROM
+            cc_user_role ur
+                LEFT JOIN cc_role_menu rm ON ur.role_id = rm.role_id
+                LEFT JOIN cc_menu m ON m.id = rm.menu_id
+        WHERE
+            ur.user_id = #{userId} AND
+            m.menu_type IN ('C','M') AND
+            m.`status` = 0 AND
+            m.del_flag = 0
+        ORDER BY
+            m.parent_id,m.order_num;
     </select>
 </mapper>

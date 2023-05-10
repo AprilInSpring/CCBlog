@@ -1,6 +1,7 @@
 package com.zxnk.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zxnk.dto.AddArticleDto;
 import com.zxnk.entity.Article;
 import com.zxnk.dto.ArticleDetailVo;
 import com.zxnk.util.ResponseResult;
@@ -20,4 +21,6 @@ public interface ArticleService{
     ResponseResult updateViewCountById(Long id);
 
     void updateArticles(Map<String, Integer> viewCount);
+
+    ResponseResult addArticle(AddArticleDto articleDto);
 }
