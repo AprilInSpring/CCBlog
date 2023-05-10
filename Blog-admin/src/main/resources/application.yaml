@@ -35,7 +35,7 @@ mybatis-plus:
       table-prefix: cc_
 
 oss:
-  accessKey: 5-2GlwUhAhcdzxRewexQrBqAVhmfBlOXyi1b5fVH
-  secretKey: _HUU99Np_NNMUr--WWPjrpCKGJZqRBvocm8UVvfP
-  bucket: ccg
-  url: http://ru8h77emb.hn-bkt.clouddn.com/
+  accessKey: 
+  secretKey: 
+  bucket: 
+  url: 
