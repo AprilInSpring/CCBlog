@@ -17,4 +17,13 @@ public interface CategoryService {
     //查询所有可用的博文分类
     public List<Category> getAllCategories();
 
+    ResponseResult selectAll(Integer pageNum, Integer pageSize, String name, String status);
+
+    ResponseResult addCategory(Category category);
+
+    ResponseResult getById(long id);
+
+    ResponseResult updateById(Category category);
+
+    ResponseResult deleteById(long id);
 }

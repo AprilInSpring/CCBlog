@@ -12,4 +12,16 @@ public interface UserService {
     ResponseResult updateUser(User user);
 
     ResponseResult register(User user);
+
+    ResponseResult selectAll(Integer pageNum, Integer pageSize, String userName, String phonenumber, String status);
+
+    ResponseResult addUser(User user);
+
+    ResponseResult deleteUserById(Long id);
+
+    ResponseResult getUserById(Long id);
+
+    ResponseResult updateUserById(User user);
+
+    ResponseResult changeStatus(User user);
 }

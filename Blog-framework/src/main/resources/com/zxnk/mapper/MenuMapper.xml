@@ -54,4 +54,7 @@
         ORDER BY
             m.parent_id,m.order_num;
     </select>
+    <select id="getPermsByRoleId" resultType="java.lang.Long">
+        SELECT cc_role_menu.menu_id FROM cc_role_menu WHERE cc_role_menu.role_id = #{id};
+    </select>
 </mapper>

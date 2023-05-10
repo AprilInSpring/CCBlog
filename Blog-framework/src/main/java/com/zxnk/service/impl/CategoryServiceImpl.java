@@ -1,7 +1,9 @@
 package com.zxnk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zxnk.dto.CategoryVo;
+import com.zxnk.dto.PageVo;
 import com.zxnk.entity.Article;
 import com.zxnk.entity.Category;
 import com.zxnk.mapper.CategoryMapper;
@@ -11,6 +13,7 @@ import com.zxnk.util.BeanCopyUtils;
 import com.zxnk.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -81,5 +84,46 @@ public class CategoryServiceImpl implements CategoryService {
         wrapper.eq(Category::getStatus,"0");
         List<Category> categories = categoryMapper.selectList(wrapper);
         return categories;
+    }
+
+    //分页查询分类信息
+    @Override
+    public ResponseResult selectAll(Integer pageNum, Integer pageSize, String name, String status) {
+        //构建查询数据
+        LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
+        //精确查询状态
+        wrapper.eq(StringUtils.hasText(status),Category::getStatus,status);
+        //模糊查询名称
+        wrapper.like(StringUtils.hasText(name),Category::getName,name);
+        //分页查询
+        Page<Category> categories = categoryMapper.selectPage(new Page<>(pageNum,pageSize),wrapper);
+        return ResponseResult.okResult(new PageVo(categories.getRecords(),categories.getTotal()));
+    }
+
+    //新增分类对象
+    @Override
+    public ResponseResult addCategory(Category category) {
+        categoryMapper.insert(category);
+        return ResponseResult.okResult();
+    }
+
+    //查询分类对象
+    @Override
+    public ResponseResult getById(long id) {
+        return ResponseResult.okResult(categoryMapper.selectById(id));
+    }
+
+    //更新分类对象
+    @Override
+    public ResponseResult updateById(Category category) {
+        categoryMapper.updateById(category);
+        return ResponseResult.okResult();
+    }
+
+    //根据id删除分类对象
+    @Override
+    public ResponseResult deleteById(long id) {
+        categoryMapper.deleteById(id);
+        return ResponseResult.okResult();
     }
 }

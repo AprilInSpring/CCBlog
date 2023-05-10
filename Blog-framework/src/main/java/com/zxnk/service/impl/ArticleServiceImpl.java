@@ -3,6 +3,8 @@ package com.zxnk.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zxnk.dto.AddArticleDto;
+import com.zxnk.dto.AdminArticle;
+import com.zxnk.dto.PageVo;
 import com.zxnk.entity.Article;
 import com.zxnk.entity.ArticleTag;
 import com.zxnk.entity.Category;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -184,4 +187,95 @@ public class ArticleServiceImpl implements ArticleService {
                 .forEach(articleTag -> articleTagMapper.insert(articleTag));
         return ResponseResult.okResult();
     }
+
+    /**
+     * @param pageNum 页码
+     * @param pageSize 每页大小
+     * @param title 标题
+     * @param summary 摘要
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 根据分页数据和文章信息，进行文章的相应查询(包括草稿)
+     * @date 2023/5/10 9:00
+    */
+    @Override
+    public ResponseResult selectAll(Integer pageNum, Integer pageSize, String title, String summary) {
+        //构建查询条件
+        LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
+        //如果文章标题有数据就根据标题进行模糊查询
+        wrapper.like(StringUtils.hasText(title),Article::getTitle,title);
+        //如果文章摘要有数据，就根据摘要进行模糊查询
+        wrapper.like(StringUtils.hasText(summary),Article::getSummary,summary);
+        //分页查询数据
+        Page<Article> articlePage = articleMapper.selectPage(new Page<Article>(pageNum, pageSize), wrapper);
+        //返回封装数据
+        return ResponseResult.okResult(new PageVo(articlePage.getRecords(),articlePage.getTotal()));
+    }
+
+    /**
+     * @param id 博文id
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 根据博文id查询文章数据，并返回相应的标签列表，进行数据封装
+     * @date 2023/5/10 9:18
+    */
+    @Override
+    public ResponseResult selectById(Long id) {
+        //查询对应的文章数据
+        Article article = articleMapper.selectById(id);
+        //完成数据转换
+        AdminArticle adminArticle = BeanCopyUtils.copyBean(article, AdminArticle.class);
+        //查询相应的标签id
+        LambdaQueryWrapper<ArticleTag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ArticleTag::getArticleId,article.getId());
+        //完成数据转换
+        List<Long> tags = articleTagMapper.selectList(wrapper).stream()
+                .map(articleTag -> articleTag.getTagId())
+                .collect(Collectors.toList());
+        //封装标签数据
+        adminArticle.setTags(tags);
+        //返回数据
+        return ResponseResult.okResult(adminArticle);
+    }
+
+    /**
+     * @param adminArticle 修改文章对象
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 完成文章对象的修改,思想：先删除全部的文章标签列表，再加入
+     * @date 2023/5/10 9:32
+    */
+    @Override
+    public ResponseResult updateArticle(AdminArticle adminArticle) {
+        //完成数据转换
+        Article article = BeanCopyUtils.copyBean(adminArticle, Article.class);
+        if(!StringUtils.hasText(article.getThumbnail())){
+            //解决没有缩略图也存在图片的bug
+            article.setThumbnail(null);
+        }
+        //完成博文修改
+        articleMapper.updateById(article);
+        //获取相应的博文标签
+        List<ArticleTag> tags = adminArticle.getTags().stream()
+                .map(tagId -> new ArticleTag(article.getId(), tagId))
+                .collect(Collectors.toList());
+        //删除原来的文章标签数据
+        LambdaQueryWrapper<ArticleTag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ArticleTag::getArticleId,article.getId());
+        articleTagMapper.delete(wrapper);
+        //完成文章标签数据的插入
+        tags.forEach(tag -> articleTagMapper.insert(tag));
+        return ResponseResult.okResult();
+    }
+
+    /**
+     * @param id 博文id
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 根据博文id进行数据的逻辑删除
+     * @date 2023/5/10 9:44
+    */
+    @Override
+    public ResponseResult deleteById(Long id) {
+        articleMapper.deleteById(id);
+        return ResponseResult.okResult();
+    }
+
+
 }

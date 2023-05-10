@@ -1,15 +1,19 @@
 package com.zxnk.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户表(CcUser)表实体类
@@ -54,6 +58,7 @@ public class User {
     private String email;
     //手机号
     @ApiModelProperty("手机号")
+    @Length(min = 11,max = 11)
     private String phonenumber;
     //用户性别（0男，1女，2未知）
     @ApiModelProperty("用户性别（0男，1女，2未知）")
@@ -62,15 +67,23 @@ public class User {
     @ApiModelProperty("头像")
     private String avatar;
     //创建人的用户id
+    @TableField(fill = FieldFill.INSERT)
     private Long createBy;
     //创建时间
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
     //更新人
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateBy;
     //更新时间
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
     //删除标志（0代表未删除，1代表已删除）
     private Integer delFlag;
+
+    @TableField(exist = false)
+    //用户的角色id集合
+    private List<Long> roleIds;
 
 }
 

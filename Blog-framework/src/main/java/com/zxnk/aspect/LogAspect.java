@@ -26,9 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class LogAspect {
 
-    {
+    /*{
         System.out.println("对象创建成功");
-    }
+    }*/
 
     //切点，使用了该注解的方法都会被代理
     @Pointcut("@annotation(com.zxnk.annotation.SystemLog)")

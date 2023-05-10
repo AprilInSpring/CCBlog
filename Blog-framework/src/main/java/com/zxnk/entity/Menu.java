@@ -1,6 +1,8 @@
 package com.zxnk.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +31,9 @@ public class Menu{
     private Long id;
     //菜单名称
     private String menuName;
+    //菜单名称，前端专用
+    @TableField(exist = false)
+    private String label;
     //父菜单ID
     private Long parentId;
     //显示顺序
@@ -50,16 +55,21 @@ public class Menu{
     //菜单图标
     private String icon;
     //创建者
+    @TableField(fill = FieldFill.INSERT)
     private Long createBy;
     //创建时间
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
     //更新者
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateBy;
     //更新时间
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
     //备注
     private String remark;
-    
+
+    @TableLogic
     private String delFlag;
 
     @TableField(exist = false)

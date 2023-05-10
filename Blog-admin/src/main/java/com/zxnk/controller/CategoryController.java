@@ -10,11 +10,10 @@ import com.zxnk.util.AppHttpCodeEnum;
 import com.zxnk.util.BeanCopyUtils;
 import com.zxnk.util.ResponseResult;
 import com.zxnk.util.WebUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -43,6 +42,60 @@ public class CategoryController {
     @GetMapping("/listAllCategory")
     public ResponseResult getAllCategories(){
         return categoryService.getAll();
+    }
+
+    /**
+     * @param pageNum 分页页码
+     * @param pageSize 分页大小
+     * @param name 名称
+     * @param status 状态
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 根据分页数据和查询条件分页查询分类信息
+     * @date 2023/5/10 18:58
+    */
+    @GetMapping("/list")
+    public ResponseResult findAll(@RequestParam(defaultValue = "1") Integer pageNum,
+                                  @RequestParam(defaultValue = "10") Integer pageSize,
+                                  String name,String status){
+        return categoryService.selectAll(pageNum,pageSize,name,status);
+    }
+
+    /**
+     * @param category 分类对象
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 新增分类对象
+     * @date 2023/5/10 18:59
+    */
+    @PostMapping()
+    public ResponseResult addCategory(@RequestBody Category category){
+        return categoryService.addCategory(category);
+    }
+
+    /**
+     * @param id 分类id
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 根据分类id查询分类对象
+     * @date 2023/5/10 19:01
+    */
+    @GetMapping("/{id}")
+    public ResponseResult getCategoryById(@PathVariable long id){
+        return categoryService.getById(id);
+    }
+
+    /**
+     * @param category 分类对象
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 更新分类对象
+     * @date 2023/5/10 19:03
+    */
+    @PutMapping()
+    public ResponseResult updateById(@RequestBody Category category){
+        return categoryService.updateById(category);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteById(@PathVariable long id){
+        return categoryService.deleteById(id);
     }
 
     /**
@@ -76,4 +129,6 @@ public class CategoryController {
             response.getWriter().println(JSON.toJSONString(ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR)));
         }
     }
+
+
 }

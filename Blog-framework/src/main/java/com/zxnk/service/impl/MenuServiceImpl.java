@@ -1,10 +1,15 @@
 package com.zxnk.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.zxnk.dto.MenuPermsVo;
 import com.zxnk.entity.Menu;
 import com.zxnk.mapper.MenuMapper;
 import com.zxnk.service.MenuService;
+import com.zxnk.util.BeanCopyUtils;
+import com.zxnk.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,6 +61,121 @@ public class MenuServiceImpl implements MenuService {
     }
 
     /**
+     * @param status 菜单状态
+     * @param menuName 菜单名
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 查询查询数据对菜单数据进行查询
+     * @date 2023/5/10 10:17
+    */
+    @Override
+    public ResponseResult selectList(String status, String menuName) {
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Menu::getStatus,status);
+        wrapper.like(StringUtils.hasText(menuName),Menu::getMenuName,menuName);
+        wrapper.orderByAsc(Menu::getParentId,Menu::getOrderNum);
+        List<Menu> menus = menuMapper.selectList(wrapper);
+        return ResponseResult.okResult(menus);
+    }
+
+    /**
+     * @param menu 菜单对象
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 新增菜单对象
+     * @date 2023/5/10 10:25
+    */
+    @Override
+    public ResponseResult addMenu(Menu menu) {
+        menuMapper.insert(menu);
+        return ResponseResult.okResult();
+    }
+
+    /**
+     * @param id 菜单id
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 根据菜单id查询菜单对象
+     * @date 2023/5/10 10:29
+    */
+    @Override
+    public ResponseResult selectById(Long id) {
+        return ResponseResult.okResult(menuMapper.selectById(id));
+    }
+
+    /**
+     * @param menu 菜单对象
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 完成菜单对象的修改
+     * @date 2023/5/10 10:32
+    */
+    @Override
+    public ResponseResult updateById(Menu menu) {
+        //进行逻辑判断，父级菜单不可以设为自己，如果设置了给出相应提示，并修改失败
+        if(menu.getParentId().equals(menu.getId())){
+            return ResponseResult.errorResult(500,"修改菜单'写博文'失败，上级菜单不能选择自己");
+        }
+        menuMapper.updateById(menu);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult deleteById(Long menuId) {
+        //逻辑判断，当前菜单菜单存在子菜单，则无法删除，并返回报错信息
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Menu::getParentId,menuId);
+        List<Menu> menus = menuMapper.selectList(wrapper);
+        if(menus != null && menus.size() > 0){
+            return ResponseResult.errorResult(500,"存在子菜单不允许删除");
+        }else {
+            menuMapper.deleteById(menuId);
+            return ResponseResult.okResult();
+        }
+    }
+
+    /**
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 查询菜单树，包含层级关系
+     * @date 2023/5/10 15:09
+    */
+    @Override
+    public ResponseResult selectTree() {
+        List<Menu> menuTree = buildTree();
+        //完成数据转换
+        return ResponseResult.okResult(menuTree);
+    }
+
+    /**
+     * @return: java.util.List<com.zxnk.entity.Menu>
+     * @decription 查询所有的菜单树，并完成子菜单的封装
+     * @date 2023/5/10 16:28
+    */
+    private List<Menu> buildTree(){
+        //查询所有可用菜单数据
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Menu::getStatus,"0");
+        wrapper.orderByAsc(Menu::getParentId,Menu::getOrderNum);
+        List<Menu> menus = menuMapper.selectList(wrapper);
+        menus.forEach(menu -> menu.setLabel(menu.getMenuName()));
+        //进行子菜单的拼接
+        List<Menu> menuTree = this.buildMenuTree(menus);
+        return menuTree;
+    }
+    /**
+     * @param id 角色id
+     * @return: com.zxnk.util.ResponseResult
+     * @decription 根据角色id查询角色的权限集合
+     * @date 2023/5/10 16:02
+    */
+    @Override
+    public ResponseResult selectTreeByRoleId(Long id) {
+        //获取菜单树
+        List<Menu> menus = buildTree();
+        //获取用户的权限id
+        List<Long> perms = menuMapper.getPermsByRoleId(id);
+        //完成数据封装
+        MenuPermsVo menuPermsVo = new MenuPermsVo(menus, perms);
+        return ResponseResult.okResult(menuPermsVo);
+    }
+
+    /**
      * @param menus 可用路由菜单信息
      * @return: java.util.List<com.zxnk.entity.Menu>
      * @decription 从可用路由菜单中完成路由菜单树的构建
@@ -86,4 +206,5 @@ public class MenuServiceImpl implements MenuService {
                 .collect(Collectors.toList());
         return menuChildrenList;
     }
+
 }
