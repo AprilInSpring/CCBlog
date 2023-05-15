@@ -4,6 +4,8 @@ import com.zxnk.entity.LoginUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Objects;
+
 public class SecurityUtils
 {
 
@@ -12,6 +14,10 @@ public class SecurityUtils
      **/
     public static LoginUser getLoginUser()
     {
+        //获取不到登录用户
+        if(Objects.isNull(getAuthentication())){
+            return null;
+        }
         return (LoginUser) getAuthentication().getPrincipal();
     }
 
@@ -28,6 +34,10 @@ public class SecurityUtils
     }
 
     public static Long getUserId() {
+        //获取不到用户，默认管理员修改
+        if(Objects.isNull(getLoginUser())){
+            return 1L;
+        }
         return getLoginUser().getUser().getId();
     }
 }

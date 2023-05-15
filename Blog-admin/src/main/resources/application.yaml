@@ -1,10 +1,10 @@
 server:
-  port: 8989
+  port: 5210
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/ccblog?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
+    url: jdbc:mysql://8.142.134.180:3306/ccblog?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username:
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
@@ -12,7 +12,7 @@ spring:
       max-request-size: 5MB
   #配置redis的链接
   redis:
-    host: 192.168.66.100
+    host: 8.142.134.180
     port: 6379
     timeout: 30000
     jedis:
@@ -21,6 +21,7 @@ spring:
         max-wait: -1
         max-idle: 8
         min-idle: 8
+    password:
 
 mybatis-plus:
   configuration:
@@ -35,7 +36,7 @@ mybatis-plus:
       table-prefix: cc_
 
 oss:
-  accessKey: 5-2GlwUhAhcdzxRewexQrBqAVhmfBlOXyi1b5fVH
-  secretKey: _HUU99Np_NNMUr--WWPjrpCKGJZqRBvocm8UVvfP
-  bucket: ccg
+  accessKey:
+  secretKey:
+  bucket: 
   url: http://ru8h77emb.hn-bkt.clouddn.com/

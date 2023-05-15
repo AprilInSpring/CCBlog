@@ -61,7 +61,7 @@ public class CommentController {
             @ApiImplicitParam(name = "pageNum",value = "分页页号"),
             @ApiImplicitParam(name = "pageSize",value = "分页大小"),
     })
-    public ResponseResult linkCommentList(@RequestParam(defaultValue = "0") Integer pageNum,@RequestParam("10") Integer pageSize){
+    public ResponseResult linkCommentList(@RequestParam(defaultValue = "0") Integer pageNum,@RequestParam(defaultValue = "10") Integer pageSize){
         return commentService.linkCommentList(pageNum,pageSize);
     }
 }

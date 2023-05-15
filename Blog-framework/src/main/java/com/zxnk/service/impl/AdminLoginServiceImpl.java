@@ -55,8 +55,8 @@ public class AdminLoginServiceImpl implements AdminLoginService {
         //认证通过，生成token
         String userId = loginUser.getUser().getId().toString();
         String token = JwtUtil.createJWT(userId);
-        //把用户id和用户信息存入redis，过期时间为10分钟
-        redisTemplate.opsForValue().set("loginAdmin:"+userId,loginUser,10, TimeUnit.MINUTES);
+        //把用户id和用户信息存入redis，过期时间为1小时
+        redisTemplate.opsForValue().set("loginAdmin:"+userId,loginUser,1, TimeUnit.HOURS);
         //把token返回
         HashMap<String, String> map = new HashMap<>();
         map.put("token",token);
