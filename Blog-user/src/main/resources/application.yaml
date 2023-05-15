@@ -36,7 +36,8 @@ mybatis-plus:
       table-prefix: cc_
 
 oss:
-  accessKey:
-  secretKey:
-  bucket:
-  url: http://ru8h77emb.hn-bkt.clouddn.com/
+  accessKey: 
+  secretKey: 
+  bucket: 
+  url:
+
