@@ -16,6 +16,7 @@ import com.zxnk.service.CategoryService;
 import com.zxnk.util.BeanCopyUtils;
 import com.zxnk.util.ResponseResult;
 import com.zxnk.util.SystemConstant;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -36,6 +38,7 @@ import java.util.stream.Collectors;
  * @Version 1.0
  */
 @Service
+@Slf4j
 public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
@@ -50,35 +53,52 @@ public class ArticleServiceImpl implements ArticleService {
     /**
      * @return: java.util.List<com.zxnk.entity.Article>
      * @decription 查询所有可状态正常的博文
+     * 2023/5/20 完成对此功能的更新，不再走数据库查询，而是直接从redis中拿数据，拿不到再走mysql，而且缓存永不失效，仅当后台curd之后
+     *           再删除缓存
      * @date 2023/4/26 9:05
     */
     @Override
     public List<Article> findAll() {
-        LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
-        //状态正常
-        wrapper.eq(Article::getStatus,SystemConstant.ARTICLE_STATUS_NORMAL);
-        //未逻辑删除
-        wrapper.eq(Article::getDelFlag,SystemConstant.ARTICLE_STATUS_NORMAL);
-        return articleMapper.selectList(wrapper);
+        List<Article> articleList = (List<Article>) redisTemplate.opsForValue().get("articleList");
+        //缓存没数据，走mysql，再更新缓存
+        if(Objects.isNull(articleList)){
+            LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
+            //状态正常
+            wrapper.eq(Article::getStatus,SystemConstant.ARTICLE_STATUS_NORMAL);
+            //未逻辑删除
+            wrapper.eq(Article::getDelFlag,SystemConstant.ARTICLE_STATUS_NORMAL);
+            articleList = articleMapper.selectList(wrapper);
+            redisTemplate.opsForValue().set("articleList",articleList);
+            log.info("-----------查询所有文章没走缓存----------");
+        }
+        return articleList;
     }
 
     /**
      * @return: com.zxnk.util.ResponseResult<java.util.List<com.zxnk.util.ResponseResult>>
      * @decription 需要查询浏览量最高的前10篇文章的信息,不能把草稿展示出来，不能把删除了的文章查询出来。要按照浏览量进行降序排序。
+     * 2023/5/20 完成对此数据的功能更新，不再即时查mysql，而是从redis中获取数据，数据与定时任务同步更新，当定时任务执行后，会删除缓存
+     *           约定redis中的key为 hotArticleList
      * @date 2023/4/25 11:25
     */
     @Override
     public List<Article> hotArticleList() {
-        LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
-        //排除草稿
-        wrapper.eq(Article::getStatus, SystemConstant.ARTICLE_STATUS_NORMAL);
-        //降序
-        wrapper.orderByDesc(Article::getViewCount);
-        //最多10条
-        wrapper.last("limit 10");
-        List<Article> articles = articleMapper.selectList(wrapper);
-        //Page<Article> page = articleMapper.selectPage(new Page<Article>(1, 10), wrapper);
-        //List<Article> records = page.getRecords();
+        List<Article> articles = (List<Article>) redisTemplate.opsForValue().get("hotArticleList");
+        //缓存为null，走mysql，再更新redis
+        if(Objects.isNull(articles)){
+            LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
+            //排除草稿
+            wrapper.eq(Article::getStatus, SystemConstant.ARTICLE_STATUS_NORMAL);
+            //降序
+            wrapper.orderByDesc(Article::getViewCount);
+            //最多10条
+            wrapper.last("limit 10");
+            articles = articleMapper.selectList(wrapper);
+            //Page<Article> page = articleMapper.selectPage(new Page<Article>(1, 10), wrapper);
+            //List<Article> records = page.getRecords();
+            redisTemplate.opsForValue().set("hotArticleList",articles);
+            log.info("-----------查询热点文章没走缓存----------");
+        }
         return articles;
     }
 
@@ -114,18 +134,27 @@ public class ArticleServiceImpl implements ArticleService {
      * @param id 博文id
      * @return: com.zxnk.entity.ArticleDetailVo
      * @decription 根据博文id查询博文对象，并完成数据的封装，返回给前端显示（需要查询出分类名称）
+     * 2023/5/20 对其完成功能更新，不再直接从mysql查询数据，而是先查询缓存，有则直接返回，没有则查询mysql再更新redis
+     *           规定redis中文章详情数据的缓存key为  articleVo:${id},不再即时更新viewcount,而是交给定时任务统一更新
      * @date 2023/4/26 21:59
     */
     @Override
     public ArticleDetailVo findById(Long id) {
-        //查询相应的文章对象
-        Article article = articleMapper.selectById(id);
-        //完成浏览量的即时更新
-        Integer viewCount = (Integer) redisTemplate.opsForHash().get("viewCount", id.toString());
-        article.setViewCount(viewCount.longValue());
-        //完成数据的封装
-        ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
-        articleDetailVo.setCategoryName(categoryService.getCategoryById(articleDetailVo.getCategoryId()).getName());
+        //先查询redis
+        ArticleDetailVo articleDetailVo = (ArticleDetailVo) redisTemplate.opsForValue().get("articleVo"+id);
+        //缓存中不存在数据
+        if(Objects.isNull(articleDetailVo)){
+            //查询相应的文章对象
+            Article article = articleMapper.selectById(id);
+            //完成浏览量的即时更新
+            //Integer viewCount = (Integer) redisTemplate.opsForHash().get("viewCount", id.toString());
+            //article.setViewCount(viewCount.longValue());
+            //完成数据的封装
+            articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
+            articleDetailVo.setCategoryName(categoryService.getCategoryById(articleDetailVo.getCategoryId()).getName());
+            //存入缓存,时限为10min
+            redisTemplate.opsForValue().set("articleVo"+id,articleDetailVo,10, TimeUnit.MINUTES);
+        }
         return articleDetailVo;
     }
 
@@ -167,6 +196,7 @@ public class ArticleServiceImpl implements ArticleService {
      * @param articleDto 博文数据类
      * @return: com.zxnk.util.ResponseResult
      * @decription 添加博文数据对象，并维护博文标签表
+     * 2023/5/20 新增redis缓存删除
      * @date 2023/5/9 17:18
     */
     @Override
@@ -185,6 +215,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .map(tag -> new ArticleTag(articleId, tag))
                 //完成博文标签表的新增
                 .forEach(articleTag -> articleTagMapper.insert(articleTag));
+        redisTemplate.delete("articleList");
         return ResponseResult.okResult();
     }
 
@@ -240,6 +271,7 @@ public class ArticleServiceImpl implements ArticleService {
      * @param adminArticle 修改文章对象
      * @return: com.zxnk.util.ResponseResult
      * @decription 完成文章对象的修改,思想：先删除全部的文章标签列表，再加入
+     * 2023/5/20 删除缓存更新
      * @date 2023/5/10 9:32
     */
     @Override
@@ -262,6 +294,7 @@ public class ArticleServiceImpl implements ArticleService {
         articleTagMapper.delete(wrapper);
         //完成文章标签数据的插入
         tags.forEach(tag -> articleTagMapper.insert(tag));
+        redisTemplate.delete("articleList");
         return ResponseResult.okResult();
     }
 
@@ -269,11 +302,13 @@ public class ArticleServiceImpl implements ArticleService {
      * @param id 博文id
      * @return: com.zxnk.util.ResponseResult
      * @decription 根据博文id进行数据的逻辑删除
+     * 2023/5/20 删除缓存更新
      * @date 2023/5/10 9:44
     */
     @Override
     public ResponseResult deleteById(Long id) {
         articleMapper.deleteById(id);
+        redisTemplate.delete("articleList");
         return ResponseResult.okResult();
     }
 
