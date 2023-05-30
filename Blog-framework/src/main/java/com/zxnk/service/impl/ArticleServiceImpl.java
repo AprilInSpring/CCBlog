@@ -119,7 +119,7 @@ public class ArticleServiceImpl implements ArticleService {
         //是否根据博文分类id分页,eq方法的重载，若第一个条件成立，则加入该条件限制查询
         wrapper.eq(Objects.nonNull(categoryId)&&categoryId > 0,Article::getCategoryId,categoryId);
         //排序，根据isTop字段，进行降序排序
-        wrapper.orderByDesc(Article::getIsTop);
+        wrapper.orderByDesc(Article::getIsTop,Article::getId);
         //分页查询
         Page<Article> articlePage = articleMapper.selectPage(new Page<Article>(pageNum, pageSize), wrapper);
         articlePage.getRecords().stream()

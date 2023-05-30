@@ -1,19 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="816b98b0-ac39-4169-9275-38ceebe013aa" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Blog-admin/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-admin/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/aspect/LogAspect.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/aspect/LogAspect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/job/ViewCountUpdateJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/job/ScheduleJob.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/service/impl/ArticleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/service/impl/ArticleServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/starter/ViewCountRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/starter/ViewCountRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-user/src/main/java/com/zxnk/controller/ArticleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-user/src/main/java/com/zxnk/controller/ArticleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-user/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-user/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-user/src/test/java/com/zxnk/OSSTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-user/src/test/java/com/zxnk/OSSTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/博客系统.md" beforeDir="false" afterPath="$PROJECT_DIR$/博客系统.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="AnnotationType" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="F:/JavaseTool/工具包/apache-maven-3.8.3" />
+        <option name="mavenHome" value="$PROJECT_DIR$/../JavaseTool/工具包/apache-maven-3.8.3" />
         <option name="userSettingsFile" value="F:\JavaseTool\工具包\apache-maven-3.8.3\conf\settings.xml" />
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProjectId" id="2Q3dZNDFUDdb8oICMPHoRL3OlJc" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.31070197&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
+    &quot;show.run.dashboard.notification&quot;: &quot;false&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;e57b096c9b27a3d983c7faa1ad62ad4d&quot;
   }
 }</component>
+  <component name="RunManager" selected="Spring Boot.BlogUserApplication">
+    <configuration name="OSSTest.testOss" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Blog-user" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.zxnk.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.zxnk" />
+      <option name="MAIN_CLASS_NAME" value="com.zxnk.OSSTest" />
+      <option name="METHOD_NAME" value="testOss" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BlogAdminApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="Blog-admin" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.zxnk.BlogAdminApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BlogUserApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="Blog-user" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.zxnk.BlogUserApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.OSSTest.testOss" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="816b98b0-ac39-4169-9275-38ceebe013aa" name="Changes" comment="" />
+      <created>1684586259222</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1684586259222</updated>
+      <workItem from="1684586259229" duration="20000" />
+      <workItem from="1685098627436" duration="10589000" />
+      <workItem from="1685156602566" duration="2103000" />
+      <workItem from="1685411327460" duration="1861000" />
+      <workItem from="1685432231094" duration="308000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="application.yaml" />
+  </component>
 </project>

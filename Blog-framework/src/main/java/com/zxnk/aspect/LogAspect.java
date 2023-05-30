@@ -2,17 +2,23 @@ package com.zxnk.aspect;
 
 import com.alibaba.fastjson.JSON;
 import com.zxnk.annotation.SystemLog;
+import com.zxnk.entity.Audience;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @ClassName LogAspect
@@ -26,6 +32,8 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class LogAspect {
 
+    @Autowired
+    private RedisTemplate redisTemplate;
     /*{
         System.out.println("对象创建成功");
     }*/
@@ -33,6 +41,9 @@ public class LogAspect {
     //切点，使用了该注解的方法都会被代理
     @Pointcut("@annotation(com.zxnk.annotation.SystemLog)")
     public void pointCut(){}
+
+    @Pointcut("@annotation(com.zxnk.annotation.ViewLog)")
+    public void ViewLog(){}
 
     //配置环绕通知
     @Around("pointCut()")
@@ -50,6 +61,22 @@ public class LogAspect {
             log.info("=======End=======" + System.lineSeparator());
         }
         return result;
+    }
+
+    //配置前置通知
+    @Before("ViewLog()")
+    public void loginBeforeLog(){
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = requestAttributes.getRequest();
+        //获取请求ip
+        String host = request.getRemoteHost();
+        //添加缓存数据
+        redisTemplate.opsForList().rightPush("audience",Audience.builder().ip(host).build());
+        SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD HH-mm-ss");
+        Date date = new Date();
+        //增加浏览数
+        redisTemplate.opsForValue().increment("count");
+        log.info(host+"ip,在"+format.format(date).toString()+"访问了网站");
     }
 
     //前置打印消息

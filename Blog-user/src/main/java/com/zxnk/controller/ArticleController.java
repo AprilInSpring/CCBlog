@@ -1,6 +1,7 @@
 package com.zxnk.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zxnk.annotation.ViewLog;
 import com.zxnk.entity.Article;
 import com.zxnk.dto.ArticleDetailVo;
 import com.zxnk.dto.ArticleVo;
@@ -70,6 +71,8 @@ public class ArticleController {
             @ApiImplicitParam(name = "pageSize",value = "分页大小"),
             @ApiImplicitParam(name = "categoryId",value = "文章类别id")
     })
+    //增加日志功能
+    @ViewLog
     public ResponseResult<PageVo> articleList(@RequestParam(defaultValue = "0")Integer pageNum,
                                               @RequestParam(defaultValue = "10") Integer pageSize,
                                               Long categoryId){

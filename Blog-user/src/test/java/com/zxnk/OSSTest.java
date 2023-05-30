@@ -10,6 +10,7 @@ import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import com.zxnk.entity.ArticleTag;
 import com.zxnk.mapper.ArticleTagMapper;
+import com.zxnk.util.MailUtils;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,5 @@ import java.io.InputStream;
 
 @SpringBootTest
 public class OSSTest {
-    @Test
-    public void testOss(){
-    }
+
 }

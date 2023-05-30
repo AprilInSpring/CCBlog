@@ -1,7 +1,9 @@
 package com.zxnk.starter;
 
 import com.zxnk.entity.Article;
+import com.zxnk.entity.Audience;
 import com.zxnk.service.ArticleService;
+import com.zxnk.service.AudienceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,6 +26,8 @@ public class ViewCountRunner implements CommandLineRunner {
     @Autowired
     private ArticleService articleService;
     @Autowired
+    private AudienceService audienceService;
+    @Autowired
     private RedisTemplate redisTemplate;
 
     //启动成功时执行的方法
@@ -36,5 +40,9 @@ public class ViewCountRunner implements CommandLineRunner {
                 .collect(Collectors.toMap(article -> article.getId().toString(), article -> article.getViewCount().intValue()));
         //存入redis中
         redisTemplate.opsForHash().putAll("viewCount",map);
+
+        //查询所有的浏览数,放入redis中，进行记录
+        int size = audienceService.findAll().size();
+        redisTemplate.opsForValue().set("count",size);
     }
 }
