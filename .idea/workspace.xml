@@ -6,16 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="816b98b0-ac39-4169-9275-38ceebe013aa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/Blog-admin/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-admin/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog-framework/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/aspect/LogAspect.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/aspect/LogAspect.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/job/ViewCountUpdateJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/job/ScheduleJob.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/service/impl/ArticleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/service/impl/ArticleServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/starter/ViewCountRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/starter/ViewCountRunner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog-user/src/main/java/com/zxnk/controller/ArticleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-user/src/main/java/com/zxnk/controller/ArticleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/job/ScheduleJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/job/ScheduleJob.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/util/MailUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/util/MailUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Blog-user/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-user/src/main/resources/application.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Blog-user/src/test/java/com/zxnk/OSSTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-user/src/test/java/com/zxnk/OSSTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/博客系统.md" beforeDir="false" afterPath="$PROJECT_DIR$/博客系统.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -72,7 +66,26 @@
     &quot;spring.configuration.checksum&quot;: &quot;e57b096c9b27a3d983c7faa1ad62ad4d&quot;
   }
 }</component>
-  <component name="RunManager" selected="Spring Boot.BlogUserApplication">
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RunManager" selected="Spring Boot.BlogAdminApplication">
+    <configuration name="OSSTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Blog-user" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.zxnk.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.zxnk" />
+      <option name="MAIN_CLASS_NAME" value="com.zxnk.OSSTest" />
+      <option name="METHOD_NAME" value="test" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="OSSTest.testOss" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Blog-user" />
       <extension name="coverage">
@@ -105,6 +118,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.OSSTest.test" />
         <item itemvalue="JUnit.OSSTest.testOss" />
       </list>
     </recent_temporary>
@@ -122,6 +136,14 @@
       <workItem from="1685156602566" duration="2103000" />
       <workItem from="1685411327460" duration="1861000" />
       <workItem from="1685432231094" duration="308000" />
+      <workItem from="1685438362569" duration="1354000" />
+      <workItem from="1685493727363" duration="753000" />
+      <workItem from="1685504215094" duration="6665000" />
+      <workItem from="1685598829485" duration="2911000" />
+      <workItem from="1685679256841" duration="3244000" />
+      <workItem from="1686046158648" duration="690000" />
+      <workItem from="1686312268322" duration="4215000" />
+      <workItem from="1686317798261" duration="938000" />
     </task>
     <servers />
   </component>
@@ -130,5 +152,19 @@
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="application.yaml" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/Blog-admin/src/main/java/com/zxnk/controller/CategoryController.java</url>
+          <line>109</line>
+          <properties class="com.zxnk.controller.CategoryController" method="export">
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
