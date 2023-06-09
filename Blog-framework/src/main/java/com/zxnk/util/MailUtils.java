@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.security.Security;
 import java.util.Properties;
 
 /**
@@ -33,11 +34,20 @@ public class MailUtils {
         //this.sendMail(text,title,elseEmail);
     }
 
-    public boolean sendMail(String text, String title,String destination){
+    private boolean sendMail(String text, String title,String destination){
         try {
+            Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+            final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
             Properties props = new Properties();
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.host", "smtp.qq.com");
+            props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
+            props.setProperty("mail.smtp.socketFactory.fallback", "false");
+            //邮箱发送服务器端口,这里设置为465端口
+            props.setProperty("mail.smtp.port", "465");
+            props.setProperty("mail.smtp.socketFactory.port", "465");
+            props.put("mail.smtp.auth", "true");
+
 
             // 发件人的账号
             props.put("mail.user", USER);

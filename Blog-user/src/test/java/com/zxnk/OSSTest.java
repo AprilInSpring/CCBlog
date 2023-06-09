@@ -11,6 +11,7 @@ import com.qiniu.util.Auth;
 import com.zxnk.entity.ArticleTag;
 import com.zxnk.mapper.ArticleTagMapper;
 import com.zxnk.util.MailUtils;
+import org.apache.commons.math3.util.RandomPivotingStrategy;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,4 +24,11 @@ import java.io.InputStream;
 @SpringBootTest
 public class OSSTest {
 
+    @Autowired
+    private MailUtils mailUtils;
+
+    @Test
+    public void test(){
+        mailUtils.sendToManagers("test","test");
+    }
 }

@@ -48,7 +48,7 @@ public class ScheduleJob {
     }
 
     //定时任务，每天晚上22点，删除今天的浏览数据
-    @Scheduled(cron = "0 0 22 * * ?")
+    @Scheduled(cron = "0 0 22 * * *")
     public void updateAudience(){
         List<Audience> audience = redisTemplate.opsForList().range("audience", 0, -1);
         //清楚缓存

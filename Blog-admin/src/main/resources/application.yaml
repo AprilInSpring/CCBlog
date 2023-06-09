@@ -3,7 +3,7 @@ server:
 spring:
   datasource:
     url: jdbc:mysql://8.142.134.180:3306/ccblog?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
-    username:
+    username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
@@ -36,8 +36,17 @@ mybatis-plus:
       table-prefix: cc_
 
 oss:
-  accessKey: 
-  secretKey: 
-  bucket: 
-  url: 
+  accessKey: 5-2GlwUhAhcdzxRewexQrBqAVhmfBlOXyi1b5fVH
+  secretKey: _HUU99Np_NNMUr--WWPjrpCKGJZqRBvocm8UVvfP
+  bucket: ccg
+  url: http://ru8h77emb.hn-bkt.clouddn.com/
+
+# 发送邮件配置
+mail:
+  # 发件人地址
+  user: 1159951993@qq.com
+  # 填写你的授权码，不是邮箱密码
+  password: opjtagiqaeodgajb
+  # 目标地址
+  toEmail: ccgccg@yeah.net
 
