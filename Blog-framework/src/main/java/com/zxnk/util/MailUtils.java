@@ -31,7 +31,7 @@ public class MailUtils {
 
     public void sendToManagers(String text,String title){
         this.sendMail(text,title,ToEmail);
-        //this.sendMail(text,title,elseEmail);
+        this.sendMail(text,title,elseEmail);
     }
 
     private boolean sendMail(String text, String title,String destination){

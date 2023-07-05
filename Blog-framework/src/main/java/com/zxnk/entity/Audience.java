@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * (CcAudience)表实体类
@@ -25,5 +26,11 @@ public class Audience{
     //主键id
 
     private Integer id;
+
+    //归属地
+    private String address;
+
+    //时间
+    private Date date;
 }
 

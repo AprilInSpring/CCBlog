@@ -46,8 +46,8 @@ public class UserLoginServiceImpl implements UserLoginService {
         //认证通过，生成token
         String userId = loginUser.getUser().getId().toString();
         String token = JwtUtil.createJWT(userId);
-        //把用户id和用户信息存入redis，过期时间为1小时
-        redisTemplate.opsForValue().set("loginUser:"+userId,loginUser,1, TimeUnit.HOURS);
+        //把用户id和用户信息存入redis，过期时间为6小时
+        redisTemplate.opsForValue().set("loginUser:"+userId,loginUser,6, TimeUnit.HOURS);
         //把token和userInfo封装并返回
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
         BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(token, userInfoVo);

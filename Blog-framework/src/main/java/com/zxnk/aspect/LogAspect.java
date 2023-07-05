@@ -1,14 +1,18 @@
 package com.zxnk.aspect;
 
 import com.alibaba.fastjson.JSON;
+import com.zxnk.annotation.CommonLog;
 import com.zxnk.annotation.SystemLog;
 import com.zxnk.entity.Audience;
+import com.zxnk.entity.BrowseLog;
+import com.zxnk.service.BrowseLogService;
+import com.zxnk.util.CommonIpAddressUtil;
+import com.zxnk.util.CommonUaUtil;
+import com.zxnk.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,6 +21,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -34,6 +39,9 @@ public class LogAspect {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private BrowseLogService browseLogService;
     /*{
         System.out.println("对象创建成功");
     }*/
@@ -43,7 +51,11 @@ public class LogAspect {
     public void pointCut(){}
 
     @Pointcut("@annotation(com.zxnk.annotation.ViewLog)")
-    public void ViewLog(){}
+    public void viewLog(){}
+
+    //常规操作日志对象
+    @Pointcut("@annotation(com.zxnk.annotation.CommonLog)")
+    public void commonLog(){}
 
     //配置环绕通知
     @Around("pointCut()")
@@ -64,27 +76,35 @@ public class LogAspect {
     }
 
     //配置前置通知
-    @Before("ViewLog()")
+    @Before("viewLog()")
     public void loginBeforeLog(){
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
         //获取请求ip
         String host = request.getRemoteHost();
+        //获取归属地
+        String addr = CommonIpAddressUtil.getCityInfo(host);
         //添加缓存数据
-        redisTemplate.opsForList().rightPush("audience",Audience.builder().ip(host).build());
-        SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD HH-mm-ss");
-        Date date = new Date();
+        redisTemplate.opsForList().rightPush("audience",Audience.builder().ip(host).address(addr).date(new Date()).build());
         //增加浏览数
         redisTemplate.opsForValue().increment("count");
-        log.info(host+"ip,在"+format.format(date).toString()+"访问了网站");
+        log.info(host+"ip,在"+ DateUtil.format(new Date()) +"访问了网站");
+    }
+
+    //常规操作日志通知
+    @AfterReturning(pointcut = "commonLog()")
+    public void doAfterReturning(JoinPoint joinPoint){
+        //获取代理方法的注解对象
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+        CommonLog commonLog = method.getAnnotation(CommonLog.class);
+        executeCommonLog(commonLog,joinPoint);
     }
 
     //前置打印消息
     private void beforeAdvice(ProceedingJoinPoint proceedingJoinPoint){
-        //获取请求对象,带有contextHolder的对象都是上下文对象，javaWeb基于面向对象的理念，把请求也封装成上下文对象
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = requestAttributes.getRequest();
-
+        //获取请求对象
+        HttpServletRequest request = getRequest();
         //获取注解对象
         SystemLog systemLog = getSystemLog(proceedingJoinPoint);
 
@@ -116,5 +136,41 @@ public class LogAspect {
         //通过方法获取注解
         SystemLog systemLog = signature.getMethod().getAnnotation(SystemLog.class);
         return systemLog;
+    }
+
+    //完成日志数据的插入
+    private void executeCommonLog(CommonLog commonLog, JoinPoint joinPoint){
+        BrowseLog browseLog = new BrowseLog();
+        //获取请求对象
+        HttpServletRequest request = getRequest();
+        //ip&addr&browser&os
+        String ip = CommonIpAddressUtil.getIp(request);
+        String addr = CommonIpAddressUtil.getCityInfo(ip);
+        String browser = CommonUaUtil.getBrowser(request);
+        String os = CommonUaUtil.getOs(request);
+        //logName&methodName&className&url
+        String logName = commonLog.logName();
+        String methodName = joinPoint.getSignature().getName();
+        String className = joinPoint.getTarget().getClass().getName();
+        String url = String.valueOf(request.getRequestURL());
+        //完成数据封装，插入
+        browseLog.setIp(ip);
+        browseLog.setAddr(addr);
+        browseLog.setBrowser(browser);
+        browseLog.setOs(os);
+        browseLog.setLogName(logName);
+        browseLog.setMethodName(methodName);
+        browseLog.setClassName(className);
+        browseLog.setUrl(url);
+        browseLog.setLocalTime(new Date());
+
+        browseLogService.insert(browseLog);
+    }
+
+    private HttpServletRequest getRequest(){
+        //获取请求对象,带有contextHolder的对象都是上下文对象，javaWeb基于面向对象的理念，把请求也封装成上下文对象
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = requestAttributes.getRequest();
+        return request;
     }
 }

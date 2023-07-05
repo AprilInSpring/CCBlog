@@ -9,7 +9,10 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import com.zxnk.entity.ArticleTag;
+import com.zxnk.entity.BrowseLog;
 import com.zxnk.mapper.ArticleTagMapper;
+import com.zxnk.mapper.BrowseLogMapper;
+import com.zxnk.util.CommonIpAddressUtil;
 import com.zxnk.util.MailUtils;
 import org.apache.commons.math3.util.RandomPivotingStrategy;
 import org.junit.jupiter.api.Test;
@@ -20,15 +23,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 @SpringBootTest
 public class OSSTest {
 
     @Autowired
-    private MailUtils mailUtils;
+    private BrowseLogMapper browseLogMapper;
 
     @Test
     public void test(){
-        mailUtils.sendToManagers("test","test");
+        /*String cityInfo = CommonIpAddressUtil.getCityInfo("115.215.118.96");
+        System.out.println(cityInfo);*/
+        List<BrowseLog> browseLogs = browseLogMapper.selectList(null);
+        browseLogs.toString();
     }
 }

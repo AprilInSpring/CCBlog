@@ -10,12 +10,15 @@ import com.zxnk.mapper.CategoryMapper;
 import com.zxnk.service.ArticleService;
 import com.zxnk.service.CategoryService;
 import com.zxnk.util.BeanCopyUtils;
+import com.zxnk.util.CacheUtil;
 import com.zxnk.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -31,7 +34,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
     @Autowired
-    private ArticleService articleService; ;
+    private ArticleService articleService;
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private CacheUtil cacheUtil;
 
     /**
      * @return: java.util.List<com.zxnk.entity.Category>
@@ -40,17 +47,28 @@ public class CategoryServiceImpl implements CategoryService {
     */
     @Override
     public List<Category> getCategoryList() {
+        //先走缓存
+        List<Category> categoryList = (List<Category>) redisTemplate.opsForValue().get("category");
+        if (!Objects.isNull(categoryList)) {
+            return categoryList;
+        }
         //先查询所有正常状态博文
-        List<Article> articlesList = articleService.findAll();
+        //List<Article> articlesList = articleService.findAll();
         //并根据这些博文获取相应的博文分类(使用stream流实现快速转换)
-        List<Long> categoryIdList = articlesList.stream()
+        /*List<Long> categoryIdList = articlesList.stream()
                                         .map(article -> article.getCategoryId())
                                         .distinct()
-                                        .collect(Collectors.toList());
+                                        .collect(Collectors.toList());*/
+
+        //采用自定义sql，并创建索引，加快访问速度
+        List<Long> categoryIdList = articleService.getAllCategoryId();
         //根据id进行数据的进一步封装，实现数据的完成化(博文分类名称)
-        List<Category> categoryList = categoryIdList.stream()
+        categoryList = categoryIdList.stream()
                 .map(id -> this.getCategoryById(id))
+                .filter(category -> category.getDelFlag() == 0) //排除已删除的类别
                 .collect(Collectors.toList());
+        //永不过期，当修改、添加文章或者添加、修改别的时候才进行缓存的刷新
+        redisTemplate.opsForValue().set("category",categoryIdList);
         return categoryList;
     }
 
@@ -124,6 +142,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public ResponseResult deleteById(long id) {
         categoryMapper.deleteById(id);
+        //更新类别缓存
+        cacheUtil.updateCategoryCache();
         return ResponseResult.okResult();
     }
 }

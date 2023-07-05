@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -110,7 +112,12 @@ public class CategoryController {
     public void export(HttpServletResponse response) throws IOException {
         try {
             //设置下载响应头信息
-            WebUtils.setDownLoadHeader("CC博客项目文章分类表.xlsx",response);
+            WebUtils.setDownLoadHeader("CCExcel"+System.currentTimeMillis()+".xlsx",response);
+            /*response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setCharacterEncoding("utf-8");
+            // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+            String fileName = URLEncoder.encode("CC博客项目文章分类表", "UTF-8").replaceAll("\\+", "%20");
+            response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");*/
             //获取所有可用的博文分类
             List<Category> allCategories = categoryService.getAllCategories();
             //完成属性赋值，简化对象的属性

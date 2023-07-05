@@ -32,4 +32,6 @@ public interface ArticleService{
     ResponseResult updateArticle(AdminArticle adminArticle);
 
     ResponseResult deleteById(Long id);
+
+    List<Long> getAllCategoryId();
 }

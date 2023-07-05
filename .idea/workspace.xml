@@ -5,12 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="816b98b0-ac39-4169-9275-38ceebe013aa" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Blog-admin/src/main/java/com/zxnk/controller/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-admin/src/main/java/com/zxnk/controller/CategoryController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Blog-admin/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-admin/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/aspect/LogAspect.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/aspect/LogAspect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/entity/Audience.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/entity/Audience.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/entity/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/entity/Category.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/job/ScheduleJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/job/ScheduleJob.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/mapper/ArticleMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/mapper/ArticleMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/service/ArticleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/service/ArticleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/service/impl/ArticleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/service/impl/ArticleServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/service/impl/CategoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/service/impl/CategoryServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/service/impl/UserLoginServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/service/impl/UserLoginServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/util/MailUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/util/MailUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/util/WebUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-framework/src/main/java/com/zxnk/util/WebUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog-user/src/main/java/com/zxnk/controller/ArticleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-user/src/main/java/com/zxnk/controller/ArticleController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Blog-user/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-user/src/main/resources/application.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Blog-user/src/test/java/com/zxnk/OSSTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Blog-user/src/test/java/com/zxnk/OSSTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/博客系统.md" beforeDir="false" afterPath="$PROJECT_DIR$/博客系统.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ccblog.sql" beforeDir="false" afterPath="$PROJECT_DIR$/ccblog.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue/sg-blog-vue/src/vue.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue/sg-blog-vue/src/vue.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +33,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="AnnotationType" />
         <option value="Interface" />
+        <option value="AnnotationType" />
         <option value="Class" />
       </list>
     </option>
@@ -57,6 +70,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/maven/repository/com/baomidou/mybatis-plus-core/3.4.3/mybatis-plus-core-3.4.3.jar&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
@@ -68,6 +82,12 @@
 }</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\CCBlog" />
+      <recent name="F:\CCBlog\Blog-framework\src\main\resources" />
+    </key>
   </component>
   <component name="RunManager" selected="Spring Boot.BlogAdminApplication">
     <configuration name="OSSTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
@@ -144,6 +164,20 @@
       <workItem from="1686046158648" duration="690000" />
       <workItem from="1686312268322" duration="4215000" />
       <workItem from="1686317798261" duration="938000" />
+      <workItem from="1686319819977" duration="552000" />
+      <workItem from="1686321572079" duration="515000" />
+      <workItem from="1686322113902" duration="2050000" />
+      <workItem from="1686358966136" duration="2944000" />
+      <workItem from="1686560119904" duration="580000" />
+      <workItem from="1686971638542" duration="123000" />
+      <workItem from="1687096390826" duration="723000" />
+      <workItem from="1687097135674" duration="10000" />
+      <workItem from="1687830440505" duration="16601000" />
+      <workItem from="1687913480064" duration="7077000" />
+      <workItem from="1688011742686" duration="1285000" />
+      <workItem from="1688394931090" duration="4615000" />
+      <workItem from="1688479071466" duration="1284000" />
+      <workItem from="1688535648454" duration="10693000" />
     </task>
     <servers />
   </component>
@@ -158,11 +192,15 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/Blog-admin/src/main/java/com/zxnk/controller/CategoryController.java</url>
-          <line>109</line>
+          <line>111</line>
           <properties class="com.zxnk.controller.CategoryController" method="export">
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$PROJECT_DIR$/../maven/repository/com/baomidou/mybatis-plus-core/3.4.3/mybatis-plus-core-3.4.3.jar!/com/baomidou/mybatisplus/core/mapper/BaseMapper.class</url>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

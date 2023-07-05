@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:mysql://8.142.134.180:3306/ccblog?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
-    password:
+    password: ccg520511!
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
@@ -21,7 +21,8 @@ spring:
         max-wait: -1
         max-idle: 8
         min-idle: 8
-    password: 
+    password: ccg520511!
+    database: 12
 
 mybatis-plus:
   configuration:

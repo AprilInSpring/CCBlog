@@ -47,5 +47,6 @@ public class WebUtils
         String fname= URLEncoder.encode(filename,"UTF-8").replaceAll("\\+", "%20");
         //设置下载的响应头
         response.setHeader("Content-disposition","attachment; filename="+fname);
+        //response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fname + ".xlsx");
     }
 }

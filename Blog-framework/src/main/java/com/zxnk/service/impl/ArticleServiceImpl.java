@@ -14,6 +14,7 @@ import com.zxnk.mapper.ArticleTagMapper;
 import com.zxnk.service.ArticleService;
 import com.zxnk.service.CategoryService;
 import com.zxnk.util.BeanCopyUtils;
+import com.zxnk.util.CacheUtil;
 import com.zxnk.util.ResponseResult;
 import com.zxnk.util.SystemConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,8 @@ public class ArticleServiceImpl implements ArticleService {
     private RedisTemplate redisTemplate;
     @Autowired
     private ArticleTagMapper articleTagMapper;
+    @Autowired
+    private CacheUtil cacheUtil;
 
     /**
      * @return: java.util.List<com.zxnk.entity.Article>
@@ -152,8 +155,8 @@ public class ArticleServiceImpl implements ArticleService {
             //完成数据的封装
             articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
             articleDetailVo.setCategoryName(categoryService.getCategoryById(articleDetailVo.getCategoryId()).getName());
-            //存入缓存,时限为10min
-            redisTemplate.opsForValue().set("articleVo"+id,articleDetailVo,10, TimeUnit.MINUTES);
+            //存入缓存,不过期，当修改的时候才进行删除
+            redisTemplate.opsForValue().set("articleVo"+id,articleDetailVo);
         }
         return articleDetailVo;
     }
@@ -216,6 +219,9 @@ public class ArticleServiceImpl implements ArticleService {
                 //完成博文标签表的新增
                 .forEach(articleTag -> articleTagMapper.insert(articleTag));
         redisTemplate.delete("articleList");
+        //更新缓存
+        cacheUtil.updateCache();
+        cacheUtil.updateCategoryCache();
         return ResponseResult.okResult();
     }
 
@@ -236,6 +242,8 @@ public class ArticleServiceImpl implements ArticleService {
         wrapper.like(StringUtils.hasText(title),Article::getTitle,title);
         //如果文章摘要有数据，就根据摘要进行模糊查询
         wrapper.like(StringUtils.hasText(summary),Article::getSummary,summary);
+        //进行文章倒排，按照创建时间倒叙
+        wrapper.orderByDesc(Article::getCreateTime);
         //分页查询数据
         Page<Article> articlePage = articleMapper.selectPage(new Page<Article>(pageNum, pageSize), wrapper);
         //返回封装数据
@@ -295,6 +303,10 @@ public class ArticleServiceImpl implements ArticleService {
         //完成文章标签数据的插入
         tags.forEach(tag -> articleTagMapper.insert(tag));
         redisTemplate.delete("articleList");
+        cacheUtil.deleteCache("articleVo"+adminArticle.getId());
+        //更新缓存
+        cacheUtil.updateCache();
+        cacheUtil.updateCategoryCache();
         return ResponseResult.okResult();
     }
 
@@ -308,8 +320,22 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ResponseResult deleteById(Long id) {
         articleMapper.deleteById(id);
-        redisTemplate.delete("articleList");
+        //删除指定id文章缓存
+        cacheUtil.deleteCache("articleVo"+id);
+        //更新缓存
+        cacheUtil.updateCache();
+        cacheUtil.updateCategoryCache();
         return ResponseResult.okResult();
+    }
+
+    /**
+     * @return: java.util.List<java.lang.Long>
+     * @decription 返回所有状态正常文章的类别id集合
+     * @date 2023/7/5 14:33
+    */
+    @Override
+    public List<Long> getAllCategoryId() {
+        return articleMapper.getAllCategoryId();
     }
 
 
