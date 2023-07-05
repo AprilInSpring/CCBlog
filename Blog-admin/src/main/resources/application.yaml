@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:mysql://8.142.134.180:3306/ccblog?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
-    password: ccg520511!
+    password: 
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
@@ -21,7 +21,7 @@ spring:
         max-wait: -1
         max-idle: 8
         min-idle: 8
-    password: ccg520511!
+    password: 
     database: 12
 
 mybatis-plus:
@@ -37,8 +37,8 @@ mybatis-plus:
       table-prefix: cc_
 
 oss:
-  accessKey: 5-2GlwUhAhcdzxRewexQrBqAVhmfBlOXyi1b5fVH
-  secretKey: _HUU99Np_NNMUr--WWPjrpCKGJZqRBvocm8UVvfP
+  accessKey: 
+  secretKey: 
   bucket: ccg
   url: http://ru8h77emb.hn-bkt.clouddn.com/
 
@@ -47,7 +47,7 @@ mail:
   # 发件人地址
   user: 1159951993@qq.com
   # 填写你的授权码，不是邮箱密码
-  password: opjtagiqaeodgajb
+  password: 
   # 目标地址
   toEmail: ccgccg@yeah.net
 
